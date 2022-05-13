@@ -84,6 +84,8 @@ public class BillAcceptanceDisclosureService {
             });
         }
 
+        // 升序排序
+        corpEntities.sort(Comparator.comparing(CorpEntity::getIndex));
         // 异常断点数据处理
         final List<CorpEntity> finalNewDataSource = new LinkedList<>();
         Integer handleOkIndex = Optional.ofNullable((Integer) redisService.get(HANDLE_OK_INDEX)).orElse(0);
@@ -94,8 +96,6 @@ public class BillAcceptanceDisclosureService {
                 finalNewDataSource.add(corpEntities.get(i));
             }
         }
-        // 升序排序
-        finalNewDataSource.sort(Comparator.comparing(CorpEntity::getIndex));
 
         // 接口数据查询处理
         boolean isFullOk = true;
