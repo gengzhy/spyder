@@ -1,15 +1,5 @@
 #thymeleaf
 spring:
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
-    encoding: UTF-8
-    servlet:
-      content-type: text/html
-    cache: false
-  mvc:
-    static-path-pattern: /static/**
 ##redis
   redis:
     database: 9

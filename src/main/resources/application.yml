@@ -17,12 +17,3 @@ spring:
     cache: false
   mvc:
     static-path-pattern: /static/**
-
-#企业数据源文件信息
-corp:
-  substr-left-brackets: true
-  allowed-origin:
-    enable: false
-    allowed-urls:
-      - 127.0.0.1:9000
-      - 127.0.0.1:9090
