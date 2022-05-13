@@ -94,6 +94,8 @@ public class BillAcceptanceDisclosureService {
                 finalNewDataSource.add(corpEntities.get(i));
             }
         }
+        // 升序排序
+        finalNewDataSource.sort(Comparator.comparing(CorpEntity::getIndex));
 
         // 接口数据查询处理
         boolean isFullOk = true;
@@ -106,7 +108,7 @@ public class BillAcceptanceDisclosureService {
                 wrapper(acceptanceInfoList, data, index, showMonth);
                 ++handleOkIndex;
             } catch (Exception e) {
-                redisService.set(HANDLE_OK_INDEX, handleOkIndex, 3600L);
+                redisService.set(HANDLE_OK_INDEX, handleOkIndex);
                 log.error("处理到第几【{}】条数据【{}】，接口处理失败：{}", handleOkIndex, currentHandleCorp, e.getMessage());
                 isFullOk = false;
                 break;
