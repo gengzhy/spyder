@@ -1,0 +1,26 @@
+html {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -ms-overflow-style: scrollbar;
+    height: 100%
+}
+
+ul, li {
+    list-style-type: none
+}
+
+.box {
+    border: 1px solid gray;
+    border-radius: 20px;
+    width: 60%;
+    height: 400px;
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>票据承兑信用信息披露查询 - 首页</title>
+    <link rel="stylesheet" th:href="@{/static/css/common.css}">
+</head>
+<body>
+<div class="box">
+    <h3 th:text="${name}"></h3>
+    <p>
+        <button onclick="downloadExcelTemplate()">票据承兑人源数据模板下载（标题栏请勿修改）</button>
+    </p>
+    <form action="upload" method="post" enctype="multipart/form-data">
+        <input type="file" id="excel-file" name="file" multiple="multiple" accept=".xlsx,.xls"/>
+        <input type="button" onclick="fileUpload()" value="上传承兑人信息源数据">
+    </form>
+    <hr>
+    <div>
+        披露信息时点日期：
+        <input type="month" id="showMonth"/>
+        <button onclick="downloadExcel()">导出票据承兑信用信息披露信息</button>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/static/js/jquery1.11.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/bill-acceptance.js}"></script>
+</body>
+</html>
