@@ -73,9 +73,9 @@ public class HttpClientTool {
     /**
      * HTTP Get 获取内容
      *
-     * @param url    请求的url地址 ?之前的地址
+     * @param url     请求的url地址 ?之前的地址
      * @param headers 请求头参数
-     * @param params 请求的参数
+     * @param params  请求的参数
      * @return 响应数据
      */
     protected String doGet(String url, Map<String, String> headers, Map<String, Object> params) {
@@ -91,7 +91,9 @@ public class HttpClientTool {
 
             CloseableHttpResponse response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
+            String reasonPhrase = response.getStatusLine().getReasonPhrase();
             if (statusCode != HttpStatus.SC_OK) {
+                log.error("HttpClient Get handle failed: {}-{}", statusCode, reasonPhrase);
                 httpGet.abort();
                 throw new RuntimeException("HttpClient,error status code :" + statusCode);
             }
@@ -124,9 +126,9 @@ public class HttpClientTool {
     /**
      * HTTP Post 获取内容
      *
-     * @param url    请求的url地址 ?之前的地址
+     * @param url     请求的url地址 ?之前的地址
      * @param headers 请求头参数
-     * @param params 请求的参数
+     * @param params  请求的参数
      * @return 页面内容
      * @throws IOException
      */
@@ -144,9 +146,10 @@ public class HttpClientTool {
         try {
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
+            String reasonPhrase = response.getStatusLine().getReasonPhrase();
             if (statusCode != HttpStatus.SC_OK) {
                 httpPost.abort();
-                log.warn("http请求通信码：" + statusCode);
+                log.error("HttpClient Post handle failed: {}-{}", statusCode, reasonPhrase);
                 throw new RuntimeException("HttpClient,error status code :" + statusCode);
             }
             HttpEntity entity = response.getEntity();

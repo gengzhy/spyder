@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <title>票据承兑信用信息披露查询 - 首页</title>
     <link rel="stylesheet" th:href="@{/static/css/common.css}">
+    <style>
+        button, input[type='button'] {
+            background: #3061b8;
+            color: #fff;
+            border-radius: 2em;
+        }
+
+        button:hover {
+            background: #b61a1a;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div class="box">
@@ -11,20 +23,120 @@
     <p>
         <button onclick="downloadExcelTemplate()">票据承兑人源数据模板下载（标题栏请勿修改）</button>
     </p>
+    <hr>
     <form action="upload" method="post" enctype="multipart/form-data">
-        <input type="file" id="excel-file" name="file" multiple="multiple" accept=".xlsx,.xls"/>
-        <input type="button" onclick="fileUpload()" value="上传承兑人信息源数据">
+        <P>元数据上传类型：
+            <select name="busiType" id="busiType1">
+                <option name="META_GUIZHOU_TOP100" value="META_GUIZHOU_TOP100" SELECTED>贵州省企业100强</option>
+                <option name="META_BANK_CREDIT_RMB5000W" value="META_BANK_CREDIT_RMB5000W">全行授信5000万元以上客户</option>
+            </select>
+        </P>
+        <p>文件：
+            <input type="file" id="excel-file" name="file" multiple="multiple" accept=".xlsx,.xls"/>
+        </p>
+        <p>
+            <button type="button" onclick="fileUpload()">上传承兑人信息元数据</button>
+        </p>
     </form>
     <hr>
     <div>
-        披露信息时点日期：
-        <input type="month" id="showMonth"/>
-        <button onclick="downloadExcel()">导出票据承兑信用信息披露信息</button>
+        <p>
+            披露信息时点日期：
+            <input type="month" id="showMonth"/>
+        </p>
+        <P>文件下载类型：
+            <select name="busiType" id="busiType2">
+                <option name="META_GUIZHOU_TOP100" value="META_GUIZHOU_TOP100" SELECTED>贵州省企业100强</option>
+                <option name="META_BANK_CREDIT_RMB5000W" value="META_BANK_CREDIT_RMB5000W">全行授信5000万元以上客户</option>
+            </select>
+        </P>
+        <p>
+            <button onclick="downloadExcel()">下载票据承兑信用信息披露信息</button>
+        </p>
     </div>
 </div>
 
 <script type="text/javascript" th:src="@{/static/js/jquery1.11.3.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/js/axios.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/bill-acceptance.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/fileutil.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById("showMonth").value = getLastMonth()
+    })
+
+    /**
+     * 文件下载
+     */
+    function downloadExcelTemplate() {
+        const data = new FormData()
+        data.append("showMonth", showMonth)
+        axios({
+            method: 'post',
+            url: 'download/template',
+            responseType: 'blob'
+        }).then(resp => {
+            // 需使用decodeURIComponent解码
+            downloadExcelFile(resp.data, decodeURIComponent(resp.headers['excel-file-name']))
+        }).catch(error => alert(error))
+    }
+
+    /**
+     * 文件上传
+     */
+    function fileUpload() {
+        const busiType = $("#busiType1").val();
+        if (!busiType || showMonth === '') {
+            alert("{元数据文件上传类型}不能为空！")
+            return
+        }
+        const files = document.getElementById("excel-file").files
+        if (files.length === 0) {
+            alert("上传的文件为空")
+            return
+        }
+        const data = new FormData()
+        data.append("file", files[0])
+        data.append("busiType", busiType)
+        axios({
+            method: 'post',
+            url: 'upload',
+            data: data,
+            responseType: 'json'
+        }).then(resp => {
+            alert(resp.data.message)
+        }).catch(error => alert(error))
+    }
+
+    /**
+     * 文件下载
+     */
+    function downloadExcel() {
+        const showMonth = $("#showMonth").val();
+        if (!showMonth || showMonth === '') {
+            alert("{披露信息时点日期}不能为空！")
+            return
+        }
+        const busiType = $("#busiType2").val();
+        if (!busiType || showMonth === '') {
+            alert("{文件下载类型}不能为空！")
+            return
+        }
+        const data = new FormData()
+        data.append("showMonth", showMonth)
+        data.append("busiType", busiType)
+        axios({
+            method: 'post',
+            url: 'download',
+            data: data,
+            responseType: 'blob'
+        }).then(resp => {
+            // 需使用decodeURIComponent解码
+            let fileName = resp.headers['excel-file-name']
+            fileName = fileName ? decodeURIComponent(fileName) : "下载错误"
+            downloadExcelFile(resp.data, fileName)
+        }).catch(error => alert(error))
+    }
+</script>
 </body>
 </html>

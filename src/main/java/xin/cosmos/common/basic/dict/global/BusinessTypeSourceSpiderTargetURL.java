@@ -1,4 +1,4 @@
-package xin.cosmos.common.basic.dict;
+package xin.cosmos.common.basic.dict.global;
 
 import lombok.Getter;
 

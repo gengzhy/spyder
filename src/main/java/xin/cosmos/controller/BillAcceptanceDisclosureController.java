@@ -38,8 +38,8 @@ public class BillAcceptanceDisclosureController {
      */
     @ResponseBody
     @PostMapping("/upload")
-    public R<?> upload(@RequestParam(value = "file") MultipartFile file) {
-        billAcceptanceDisclosureService.upload(file);
+    public R<?> upload(@RequestParam(value = "file") MultipartFile file, @RequestParam("busiType") String busiType) {
+        billAcceptanceDisclosureService.upload(file, busiType);
         return R.ok();
     }
 
@@ -51,8 +51,10 @@ public class BillAcceptanceDisclosureController {
      */
     @ResponseBody
     @PostMapping("/download")
-    public void downloadExcelFile(HttpServletResponse response, @RequestParam("showMonth") String showMonth) {
-        List<BillAcceptanceVO> data = billAcceptanceDisclosureService.queryCorpBillAcceptance(showMonth);
+    public void downloadExcelFile(HttpServletResponse response,
+                                  @RequestParam("showMonth") String showMonth,
+                                  @RequestParam("busiType") String busiType) {
+        List<BillAcceptanceVO> data = billAcceptanceDisclosureService.queryCorpBillAcceptance(showMonth, busiType);
         String fileName = "【" + showMonth + "】票据承兑信用信息披露查询数据" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssS"));
         FileUtils.downloadExcel(fileName, response, data, BillAcceptanceVO.class);
     }

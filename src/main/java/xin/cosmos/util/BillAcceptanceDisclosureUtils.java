@@ -2,7 +2,7 @@ package xin.cosmos.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import xin.cosmos.common.basic.dict.BusinessTypeSourceSpiderTargetURL;
+import xin.cosmos.common.basic.dict.global.BusinessTypeSourceSpiderTargetURL;
 import xin.cosmos.common.util.ObjectsUtil;
 import xin.cosmos.dto.bill.disclosure.BillAcceptanceAccountInfo;
 import xin.cosmos.dto.bill.disclosure.BillAcceptanceInfo;
